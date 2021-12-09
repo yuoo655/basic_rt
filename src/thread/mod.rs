@@ -38,38 +38,22 @@ pub fn init() {
     let thread_pool = ThreadPool::new(100, Box::new(scheduler));
 
     // 新建内核线程 idle ，其入口为 coroutine::thread_mian
-    let idle = Thread::new_box_thread(thread_mian as usize, &CPU as *const Processor as usize);
+    let idle = Thread::new_box_thread(Processor::idle_main as usize, &CPU as *const Processor as usize);
 
 
     // 我们需要传入 CPU 的地址作为参数
     // 初始化 CPU
     CPU.init(idle, Box::new(thread_pool));
 
-    // 依次新建 5 个内核线程并加入调度单元
-    for i in 0..5 {
-        CPU.add_thread({
-            let thread = Thread::new_box_thread(hello_thread as usize, i);
-            thread
-        });
-    }
+    // 新建一个thread_main加入线程池
+    
+    CPU.add_thread({
+        let thread = Thread::new_box_thread(thread_mian as usize, 1);
+        thread
+    });
+
 }
 
-
-
-
-
-
-//切换到此线程
-#[no_mangle]
-pub extern "C" fn hello_thread(arg: usize) -> ! {
-    println!("begin of thread {}", arg);
-    for i in 0..800 {
-        println!("{}", arg);
-	}
-    println!("\nend  of thread {}", arg);
-    CPU.exit(0);
-    loop {}
-}
 
 
 
