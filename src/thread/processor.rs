@@ -10,6 +10,8 @@ use super::Tid;
 
 use crate::println;
 
+use crate::task::USER_TASK_QUEUE;
+
 unsafe impl Sync for Processor {}
 pub struct Processor {
     inner: UnsafeCell<Option<ProcessorInner>>,
@@ -83,12 +85,22 @@ impl Processor {
                 // 通知线程池这个线程需要将资源交还出去
                 inner.pool.retrieve(tid, thread);
             }
-            // 如果现在并无任何可运行线程
+            // 如果现在并无任何可运行线程.则检查协程队列是否为空
             else {
-                // // 打开异步中断，并等待异步中断的到来
-                // enable_and_wfi();
-                // // 异步中断处理返回后，关闭异步中断
-                // disable_and_store();
+                let mut queue = USER_TASK_QUEUE.lock();
+                if queue.is_empty() {
+                    println!("finish task");
+                } else {
+
+                    //如果线程列表为空，但任务队列不空，创建一个线程
+                    self.add_thread(        
+                        {
+                            let thread = Thread::new_box_thread(crate::task::thread_mian as usize, 1);
+                            thread
+                        })
+        
+                }
+
             }
         }
     }

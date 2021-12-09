@@ -1,5 +1,6 @@
 use super::runtime::*;
-
+use alloc::sync::Arc;
+use alloc::boxed::Box;
 use core::future::Future;
 use core::pin::Pin;
 use core::sync::atomic::{AtomicUsize, Ordering};
@@ -13,6 +14,19 @@ use woke::waker_ref;
 use lazy_static::*;
 
 
+
+lazy_static! {
+    pub static ref USER_TASK_QUEUE: Arc<Mutex<Box<UserTaskQueue>>> =
+        Arc::new(
+            Mutex::new(
+                Box::new(
+                    UserTaskQueue {
+                        queue: VecDeque::new()
+                    }
+                )
+            )
+        );
+}
 
 
 pub fn thread_mian() {

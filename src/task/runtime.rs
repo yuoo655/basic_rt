@@ -16,18 +16,6 @@ use lazy_static::*;
 
 
 
-lazy_static! {
-    pub static ref USER_TASK_QUEUE: Arc<Mutex<Box<UserTaskQueue>>> =
-        Arc::new(
-            Mutex::new(
-                Box::new(
-                    UserTaskQueue {
-                        queue: VecDeque::new()
-                    }
-                )
-            )
-        );
-}
 
 #[no_mangle]
 lazy_static! {

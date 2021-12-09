@@ -27,7 +27,7 @@ use thread_pool::ThreadPool;
 pub static CPU : Processor = Processor::new();
 
 
-use crate::coroutine::thread_mian;
+use crate::task::thread_mian;
 
 use crate::println;
 
