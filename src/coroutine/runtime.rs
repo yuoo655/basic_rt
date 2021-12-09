@@ -133,56 +133,6 @@ impl UserTaskQueue {
 }
 
 
-//执行器
-
-
-pub fn run() {
-    loop {
-        let mut queue = USER_TASK_QUEUE.lock();
-        let task = queue.peek_task();
-        match task {
-            // have any task
-            Some(task) => {
-                let mywaker = task.clone();
-                let waker = waker_ref(&mywaker);
-                let mut context = Context::from_waker(&*waker);
-
-                let r = task.reactor.clone();
-                let mut r = r.lock();
-
-                if r.is_ready(task.id) {
-                    let mut future = task.future.lock();
-                    match future.as_mut().poll(&mut context) {
-                        Poll::Ready(_) => {
-                            // 任务完成
-                            r.finish_task(task.id);
-                        }
-                        Poll::Pending => {
-                            r.add_task(task.id);
-                        }
-                    }
-                } else if r.contains_task(task.id) {
-                    r.add_task(task.id);
-                } else {
-                    let mut future = task.future.lock();
-                    match future.as_mut().poll(&mut context) {
-                        Poll::Ready(_) => {
-                            // // 任务完成
-                            // println!("task completed");
-                        }
-                        Poll::Pending => {
-                            r.register(task.id);
-                        }
-                    }
-                }
-            }
-            None => return
-        }
-    }
-}
-
-
-
 pub enum TaskState {
     Ready,
     NotReady,

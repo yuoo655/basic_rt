@@ -40,4 +40,18 @@ impl Thread {
            self.context.switch(&mut target.context);
        }
     }
+
+
+    pub fn new_box_thread(entry: usize, arg: usize) -> Box<Thread> {
+        unsafe {
+            let ustack_ = UserStack::new();
+            Box::new(
+                Thread {
+                    context: Context::new_thread_context(entry, arg, ustack_.top()),
+                    ustack: ustack_,
+                    space_id: arg
+                }
+            )
+        }
+    }
 }

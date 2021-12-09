@@ -12,9 +12,12 @@ pub mod runtime;
 pub mod scheduler;
 pub mod syscall;
 pub mod init;
+pub mod coroutine;
+
 
 pub use thread::*;
 pub use runtime::*;
+pub use coroutine::*;
 pub use scheduler::*;
 
 extern crate alloc;

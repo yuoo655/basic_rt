@@ -3,7 +3,10 @@ use alloc::collections::VecDeque;
 use alloc::sync::Arc;
 use spin::Mutex;
 use lazy_static::*;
+use super::Tid;
+use alloc::vec::Vec;
 
+//old
 
 pub struct ThreadManager {
     ready_queue: VecDeque<Thread>,
@@ -41,5 +44,3 @@ pub fn thread_space_id() -> usize {
     let x = THREAD_MANAGER.lock().ready_queue.front().unwrap().space_id;
     x
 }
-
-
