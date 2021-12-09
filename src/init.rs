@@ -24,7 +24,7 @@ async fn foo(x:usize){
     println!("{:?}", x);
 }
 
-pub fn coroutine(){
+pub fn task(){
     let mut queue = USER_TASK_QUEUE.lock();
     for i in 0..100_000_000 {
         queue.add_task(UserTask::spawn(Mutex::new(Box::pin(foo(i)))));
@@ -55,8 +55,9 @@ unsafe fn init_payload_environment() {
 }
 
 fn main(){
-    coroutine();
-    thread();
+    // task();
+    // thread();
+    crate::thread::init();
     panic!("!!");
 }
 

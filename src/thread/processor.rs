@@ -97,8 +97,8 @@ impl Processor {
                         {
                             let thread = Thread::new_box_thread(crate::task::thread_mian as usize, 1);
                             thread
-                        })
-        
+                        }
+                    )
                 }
 
             }
