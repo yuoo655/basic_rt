@@ -29,7 +29,7 @@ lazy_static! {
 }
 
 
-pub fn thread_mian() {
+pub fn thread_main() {
     loop {
         let mut queue = USER_TASK_QUEUE.lock();
         let task = queue.peek_task();

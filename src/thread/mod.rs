@@ -27,12 +27,12 @@ use thread_pool::ThreadPool;
 pub static CPU : Processor = Processor::new();
 
 
-use crate::task::thread_mian;
+use crate::task::thread_main;
 
 use crate::println;
 
 pub fn init() {
-    // 使用 Round Robin Scheduler
+    // 使用 Fifo Scheduler
     let scheduler = FifoScheduler::new();
     // 新建线程池
     let thread_pool = ThreadPool::new(100, Box::new(scheduler));
@@ -40,18 +40,15 @@ pub fn init() {
     // 新建内核线程 idle ，其入口为 Processor::idle_main
     let idle = Thread::new_box_thread(Processor::idle_main as usize, &CPU as *const Processor as usize);
 
-
-    // 我们需要传入 CPU 的地址作为参数
     // 初始化 CPU
     CPU.init(idle, Box::new(thread_pool));
 
     // 新建一个thread_main加入线程池
     
     CPU.add_thread({
-        let thread = Thread::new_box_thread(thread_mian as usize, 1);
+        let thread = Thread::new_box_thread(thread_main as usize, 1);
         thread
     });
-
 }
 
 
