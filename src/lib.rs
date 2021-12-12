@@ -8,8 +8,8 @@
 pub mod thread;
 pub mod console;
 pub mod lang_items;
-pub mod runtime;
-pub mod scheduler;
+// pub mod runtime;
+// pub mod scheduler;
 pub mod syscall;
 pub mod init;
 pub mod task;

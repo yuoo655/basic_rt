@@ -22,6 +22,7 @@ pub mod processor;
 
 use processor::Processor;
 use scheduler::FifoScheduler;
+use scheduler::*;
 use thread_pool::ThreadPool;
 
 pub static CPU : Processor = Processor::new();
@@ -37,7 +38,7 @@ pub fn init() {
     // 新建线程池
     let thread_pool = ThreadPool::new(100, Box::new(scheduler));
 
-    // 新建内核线程 idle ，其入口为 Processor::idle_main
+    // 新建idle ，其入口为 Processor::idle_main
     let idle = Thread::new_box_thread(Processor::idle_main as usize, &CPU as *const Processor as usize);
 
     // 初始化 CPU

@@ -11,6 +11,7 @@ use super::Tid;
 use crate::println;
 
 use crate::task::USER_TASK_QUEUE;
+use crate::task::thread_main;
 
 unsafe impl Sync for Processor {}
 pub struct Processor {
@@ -95,7 +96,7 @@ impl Processor {
                     //如果线程列表为空，但任务队列不空，创建一个线程
                     self.add_thread(        
                         {
-                            let thread = Thread::new_box_thread(crate::task::thread_mian as usize, 1);
+                            let thread = Thread::new_box_thread(crate::task::thread_main as usize, 1);
                             thread
                         }
                     )

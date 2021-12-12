@@ -118,6 +118,11 @@ impl UserTaskQueue {
         let index = self.queue.iter().position(|task| task.id == id).unwrap();
         self.queue.remove(index);
     }
+    
+    pub fn is_empty(&self) -> bool {
+        self.queue.is_empty()
+    }
+
 }
 
 
